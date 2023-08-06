@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+		<title>Untitled 1</title>
+		<script src="scripts/circlewithevent.js"></script>
+		<script src="scripts/graph.ob.js"></script>
+		<script src="scripts/graph_use.ob.js"></script>
+		<script src="scripts/graph_use2.ob.js"></script>
+	</head>
+	<body>
+		<div id="questions">
+			<div id="q1">
+				<p style="font-size:24px;"><b>Q 1. Newton’s rings experiment is performed with air gap between lens and plate. Now that gap is filled with water. What will be effect on radius (or diameter)? And what is the reason for change in the pattern. </b></p>
+				<p style="font-size:24px;">
+				<input type="radio" name="q1rad" value="1">Radius (or diameter) will remain constant but there will be more brightness<br>
+				<input type="radio" name="q1rad" value="2">Radius (or diameter) will increase<br>
+				<input type="radio" name="q1rad" value="3">Radius (or diameter) will decrease<br>
+				<input type="radio" name="q1rad" value="4">There will be no effect<br>
+				</p>
+				<!--<ol>
+					<li style="cursor:pointer; font-size:24px; margin:15px" onclick="submitanswer(1, 1)">Radius (or diameter) will remain constant but there will be more brightness</li>
+					<li style="cursor:pointer; font-size:24px; margin:15px" onclick="submitanswer(1, 2)">Radius (or diameter) will increase</li>
+					<li style="cursor:pointer; font-size:24px; margin:15px" onclick="submitanswer(1, 3)">Radius (or diameter) will decrease</li>
+					<li style="cursor:pointer; font-size:24px; margin:15px" onclick="submitanswer(1, 4)">There will be no effect</li>
+				</ol>-->
+			</div>
+			<div id="q2">
+				<p style="font-size:24px;"><b>Q 2. Newton’s rings experiment is performed and radius (or diameter) is calculated. Now Plano-convex lens is replaced with another Plano-convex lens of greater Radius of curvature. What will be effect on radius (or diameter)? </b></p>
+				<p style="font-size:24px;">
+					<input type="radio" name="q3rad" value="1">Radius (or diameter) of rings will remain constant but there will be more brightness<br>
+					<input type="radio" name="q3rad" value="2">Radius (or diameter) of rings will increase<br>
+					<input type="radio" name="q3rad" value="3">Radius (or diameter) of rings will decrease<br>
+					<input type="radio" name="q3rad" value="4">There will be no effect<br>
+				</p>
+				<!--<ol>
+					<li style="cursor:pointer; font-size:24px; margin:15px" onclick="submitanswer(2, 1)">Radius (or diameter) of rings will remain constant but there will be more brightness</li>
+					<li style="cursor:pointer; font-size:24px; margin:15px" onclick="submitanswer(2, 2)">Radius (or diameter) of rings will increase</li>
+					<li style="cursor:pointer; font-size:24px; margin:15px" onclick="submitanswer(2, 3)">Radius (or diameter) of rings will decrease</li>
+					<li style="cursor:pointer; font-size:24px; margin:15px" onclick="submitanswer(2, 4)">There will be no effect</li>
+				</ol>-->
+				<p id="q-hint" style="display:none; font-size:24px;"><i>Hints: Change in rings pattern is not due to instrument resolution it is due to change in the medium.
+Radius of rings is directly proportional to radius of curvature of lens. </i></p>
+			</div>
+		<div id="q123sub">
+			<button id="q123subbut" style="width:150px; height:40px; border-radius:5px 5px 5px 5px; font-size:20px;" onclick="checkanswer();">Submit</button>
+		</div>
+		<div id="q123results" style="width:100%; border:1px solid; border-color:#f00; background:#fee; color:#f00; font-size:20px;">
+			
+		</div>
+		</div>
+		<div id="conclusion-container" style="width:800px; display:none">
+			<div style="position:relative; text-align:justify; font-size:28px">
+				Conclusions: 
+			</div>
+			<div style="position:relative; text-align:justify; font-size:22px">
+				<ul id="conclusion-list">
+				</ul>
+			</div>
+		</div>
+		<script>
+			
+			var experimental_wavelength = getUrlVars()["wavelength"];
+			var medium_index = getUrlVars()["medium"];
+			function listconclusions(){
+				var standard_wavelength = 0;
+				var listitem = document.createElement("li");
+				listitem.style.height = "50px";
+				if(medium_index == 1){
+					standard_wavelength = 5893;
+					listitem.innerHTML = "The standard value of wavelength of sodium light in air is <i>" + standard_wavelength + " x 10<sup>-8</sup>cm</i>";
+				}else{
+					standard_wavelength = 4430;
+					listitem.innerHTML = "The standard value of wavelength of sodium light in water is <i>" + standard_wavelength + " &#215; 10<sup>-8</sup>cm</i>";
+				}
+				document.getElementById("conclusion-list").appendChild(listitem);
+				listitem = document.createElement("li");
+				listitem.style.height = "50px";
+				listitem.innerHTML = "The experimental value calculated is <i>" + parseInt(experimental_wavelength) + " &#215; 10<sup>-8</sup>cm</i>";
+				document.getElementById("conclusion-list").appendChild(listitem);
+				listitem = document.createElement("li");
+				listitem.style.height = "50px";
+				listitem.innerHTML = "The percentage error in value of wavelength of light is <i>" + ((standard_wavelength - experimental_wavelength)/100).toFixed(2) + "%</i>";
+				document.getElementById("conclusion-list").appendChild(listitem);
+				listitem = document.createElement("li");
+				listitem.style.height = "50px";
+				if(medium_index == 1){
+					listitem.innerHTML = "The refractive index of Air is <i>1</i>";
+				}else{
+					listitem.innerHTML = "The refractive index of Water is <i>1.33</i>";
+				}
+				document.getElementById("conclusion-list").appendChild(listitem);				
+			}
+			var questions_answered = 0;
+			function checkanswer(){
+				questions_answered = 0;
+				document.getElementById("q123results").innerHTML = "";
+				if(document.querySelector('input[name="q1rad"]:checked').value !== null){
+					var value = document.querySelector('input[name="q1rad"]:checked').value;
+					
+					if(value == 3){
+						questions_answered += 1;
+					}else{
+						document.getElementById("q123results").innerHTML += "Q1. Incorrect Answer! <br>";
+					}
+				}else{
+					document.getElementById("q123results").innerHTML += "Q1. Please Select Your Choice! <br>";
+				}
+				if(document.querySelector('input[name="q3rad"]:checked').value !== null){
+					var value = document.querySelector('input[name="q3rad"]:checked').value;
+					
+					if(value == 2){
+						questions_answered += 1;
+					}else{
+						document.getElementById("q123results").innerHTML += "Q2. Incorrect Answer! <br>";
+					}
+				}else{
+					document.getElementById("q123results").innerHTML += "Q2. Please Select Your Choice! <br>";
+				}
+				if(questions_answered >= 2){
+					document.getElementById("q1").style.display = "none";
+					document.getElementById("q2").style.display = "none";
+					document.getElementById("q123sub").style.display = "none";
+					document.getElementById("q123results").style.display = "none";
+					document.getElementById("conclusion-container").style.display = "block";
+					listconclusions();
+				}
+			}
+			function submitanswer(question_no, option_no){
+				switch(question_no){
+					case 1:
+						if(option_no == 3){
+							alert("Correct!");
+							questions_answered++;
+							if(questions_answered >= 3){
+								document.getElementById("q1").style.display = "none";
+								document.getElementById("q2").style.display = "none";
+								document.getElementById("conclusion-container").style.display = "block";
+								listconclusions();
+							}
+						}else{
+							alert("Incorrect! Please Try Again");
+							document.getElementById("q-hint").style.display = "block";
+						}
+						break;
+					case 2:
+						if(option_no == 2){
+							alert("Correct!");
+							questions_answered++;
+							if(questions_answered >= 2){
+								document.getElementById("q1").style.display = "none";
+								document.getElementById("q2").style.display = "none";
+								document.getElementById("conclusion-container").style.display = "block";
+								listconclusions();
+							}
+						}else{
+							alert("Incorrect! Please Try Again");
+							document.getElementById("q-hint").style.display = "block";
+						}
+						break;
+					default:
+						break;
+				}
+			}
+			function getUrlVars() {
+				var vars = {};
+				var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+					vars[key] = value;
+				});
+				return vars;
+			}
+		</script>
+	</body>
+</html>
